@@ -12,7 +12,6 @@ Generate unused file and directory paths by auto-incrementing numeric suffixes. 
 
 - **Automatic numbering**: Appends numeric suffixes like "file (1).txt", "file (2).txt" to avoid conflicts
 - **Intelligent sequencing**: Continues from existing numbered files/directories
-- **Thread-safe**: Atomic creation option for race-safe concurrent access
 - **Custom formatting**: Support for custom formatter functions
 - **Zero dependencies**: Lightweight with no external dependencies
 - **Type safe**: Full type hints for excellent IDE support
