@@ -7,13 +7,19 @@ This module contains the main functions:
 """
 
 import os
-import re
-import errno
 from typing import Callable, Optional
 from os import PathLike
 
-# Regex for parsing numbered suffixes like "file (2)"
-SUFFIX_RE = re.compile(r"^(?P<base>.*?)(?: \((?P<num>\d+)\))?$")
+from .helpers import (
+    parse_suffix,
+    try_create_file,
+    try_create_directory,
+    make_full_path,
+)
+from .formatters import (
+    default_file_formatter,
+    default_directory_formatter,
+)
 
 
 def unused_filename(
@@ -34,7 +40,8 @@ def unused_filename(
     Args:
         path: Desired file path
         formatter: Optional custom formatter function: (base, ext, n) -> filename.
-                   If None, uses default formatting "{base} ({n}){ext}".
+                   If None, uses default_file_formatter which formats as
+                   "{base} ({n}){ext}" (e.g., "file (1).txt").
         max_tries: Safety limit to avoid infinite loops (default: 10,000)
         create: If True, atomically create the file (race-safe)
     
@@ -60,34 +67,11 @@ def unused_filename(
     stem, ext = os.path.splitext(name)
     
     # Parse existing numbering
-    match = SUFFIX_RE.match(stem)
-    if not match:
-        base = stem
-        counter = 0
-    else:
-        base = match.group("base")
-        num_str = match.group("num")
-        counter = int(num_str) if num_str else 0
+    base, counter = parse_suffix(stem)
     
-    # Default formatter
+    # Use default formatter if none provided
     if formatter is None:
-        def formatter(base: str, ext: str, n: int) -> str:
-            return f"{base} ({n}){ext}"
-    
-    # Helper to make full path
-    def make_full_path(directory: str, name: str) -> str:
-        return os.path.join(directory, name) if directory else name
-    
-    # Helper to try creating file atomically
-    def try_create_file(path: str) -> bool:
-        try:
-            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o666)
-            os.close(fd)
-            return True
-        except OSError as e:
-            if e.errno == errno.EEXIST:
-                return False
-            raise
+        formatter = default_file_formatter
     
     # Try original path if counter == 0
     if counter == 0:
@@ -135,7 +119,8 @@ def unused_directory(
     Args:
         path: Desired directory path
         formatter: Optional custom formatter function: (base, n) -> dirname.
-                   If None, uses default formatting "{base} ({n})".
+                   If None, uses default_directory_formatter which formats as
+                   "{base} ({n})" (e.g., "backup (1)").
         max_tries: Safety limit to avoid infinite loops (default: 10,000)
         create: If True, atomically create the directory (race-safe)
     
@@ -160,33 +145,11 @@ def unused_directory(
     directory, name = os.path.split(path)
     
     # Parse existing numbering
-    match = SUFFIX_RE.match(name)
-    if not match:
-        base = name
-        counter = 0
-    else:
-        base = match.group("base")
-        num_str = match.group("num")
-        counter = int(num_str) if num_str else 0
+    base, counter = parse_suffix(name)
     
-    # Default formatter
+    # Use default formatter if none provided
     if formatter is None:
-        def formatter(base: str, n: int) -> str:
-            return f"{base} ({n})"
-    
-    # Helper to make full path
-    def make_full_path(directory: str, name: str) -> str:
-        return os.path.join(directory, name) if directory else name
-    
-    # Helper to try creating directory atomically
-    def try_create_directory(path: str) -> bool:
-        try:
-            os.mkdir(path, 0o777)
-            return True
-        except OSError as e:
-            if e.errno == errno.EEXIST:
-                return False
-            raise
+        formatter = default_directory_formatter
     
     # Try original path if counter == 0
     if counter == 0:
