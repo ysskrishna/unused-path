@@ -1,7 +1,57 @@
 [project]
 name = "unused-path"
 version = "0.1.0"
-description = "Add your description here"
+description = "Generate unused file and directory paths by auto-incrementing numeric suffixes. Similar to how browsers handle duplicate downloads."
 readme = "README.md"
 requires-python = ">=3.8"
+authors = [
+  {name = "Y. Siva Sai Krishna", email = "sivasaikrishnassk@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+  "Typing :: Typed",
+]
+keywords = [
+    "path",
+    "filename",
+    "directory",
+    "unused",
+    "unique",
+    "increment",
+    "suffix",
+    "conflict",
+    "avoid",
+    "utilities",
+    "utils",
+]
 dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+]
+
+[project.urls]
+Homepage = "https://github.com/ysskrishna/unused-path"
+Repository = "https://github.com/ysskrishna/unused-path.git"
+Issues = "https://github.com/ysskrishna/unused-path/issues"
+Changelog = "https://github.com/ysskrishna/unused-path/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["unused_path"]
