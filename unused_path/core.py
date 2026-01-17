@@ -7,7 +7,7 @@ This module contains the main functions:
 """
 
 import os
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 from os import PathLike
 
 from .helpers import (
@@ -23,7 +23,7 @@ from .formatters import (
 
 
 def unused_filename(
-    path: str | PathLike[str],
+    path: Union[str, PathLike],
     *,
     formatter: Optional[Callable[[str, str, int], str]] = None,
     max_tries: int = 10_000,
@@ -102,7 +102,7 @@ def unused_filename(
 
 
 def unused_directory(
-    path: str | PathLike[str],
+    path: Union[str, PathLike],
     *,
     formatter: Optional[Callable[[str, int], str]] = None,
     max_tries: int = 10_000,

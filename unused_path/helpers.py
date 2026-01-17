@@ -7,12 +7,13 @@ These functions are used internally but can be imported if needed.
 import os
 import re
 import errno
+from typing import Tuple
 
 # Regex for parsing numbered suffixes like "file (2)"
 SUFFIX_RE = re.compile(r"^(?P<base>.*?)(?: \((?P<num>\d+)\))?$")
 
 
-def parse_suffix(name: str) -> tuple[str, int]:
+def parse_suffix(name: str) -> Tuple[str, int]:
     """
     Parse a name to extract the base name and counter number.
     
