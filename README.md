@@ -3,6 +3,8 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/ysskrishna/unused-path/blob/main/LICENSE)
 ![Tests](https://github.com/ysskrishna/unused-path/actions/workflows/test.yml/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/unused-path)](https://pypi.org/project/unused-path/)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/unused-path?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/unused-path)
 
 Generate unused file and directory paths by auto-incrementing numeric suffixes. Similar to how browsers handle duplicate downloads.
 
@@ -112,6 +114,23 @@ When working with file operations, you often need to avoid overwriting existing 
 
 `unused-path` handles this automatically, similar to how browsers handle duplicate downloads.
 
+## Changelog
+
+See [CHANGELOG.md](https://github.com/ysskrishna/unused-path/blob/main/CHANGELOG.md) for a detailed list of changes and version history.
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](https://github.com/ysskrishna/unused-path/blob/main/CONTRIBUTING.md) for details.
+
+## Support
+
+If you find this library helpful:
+
+- ⭐ Star the repository
+- 🐛 Report issues
+- 🔀 Submit pull requests
+- 💝 [Sponsor on GitHub](https://github.com/sponsors/ysskrishna)
+
 ## License
 
 MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](https://github.com/ysskrishna/unused-path/blob/main/LICENSE) file for details.
@@ -121,5 +140,6 @@ MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](http
 <p align="left">
   <a href="https://github.com/ysskrishna">Author's GitHub</a> •
   <a href="https://linkedin.com/in/ysskrishna">Author's LinkedIn</a> •
-  <a href="https://github.com/ysskrishna/unused-path/issues">Report Issues</a>
+  <a href="https://github.com/ysskrishna/unused-path/issues">Report Issues</a> •
+  <a href="https://pypi.org/project/unused-path/">Package on PyPI</a>
 </p>
