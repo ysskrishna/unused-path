@@ -7,8 +7,8 @@ from unused_path.helpers import (
     try_create_file,
     try_create_directory,
     make_full_path,
-)
-from unused_path.formatters import (
+    validate_file_formatter,
+    validate_directory_formatter,
     default_file_formatter,
     default_directory_formatter,
 )
@@ -67,6 +67,9 @@ def unused_filename(
     # Use default formatter if none provided
     if formatter is None:
         formatter = default_file_formatter
+    else:
+        # Validate custom formatter
+        validate_file_formatter(formatter)
     
     # Try original path if counter == 0
     if counter == 0:
@@ -148,6 +151,9 @@ def unused_directory(
     # Use default formatter if none provided
     if formatter is None:
         formatter = default_directory_formatter
+    else:
+        # Validate custom formatter
+        validate_directory_formatter(formatter)
     
     # Try original path if counter == 0
     if counter == 0:

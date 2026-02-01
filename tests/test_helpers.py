@@ -6,8 +6,6 @@ from unused_path.helpers import (
     try_create_file,
     try_create_directory,
     make_full_path,
-)
-from unused_path.formatters import (
     default_file_formatter,
     default_directory_formatter,
 )
