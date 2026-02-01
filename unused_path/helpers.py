@@ -1,9 +1,3 @@
-"""
-Helper functions for unused-path package.
-
-These functions are used internally but can be imported if needed.
-"""
-
 import os
 import re
 import errno

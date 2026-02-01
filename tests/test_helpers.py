@@ -1,5 +1,3 @@
-"""Tests for helper functions."""
-
 import os
 import tempfile
 import pytest

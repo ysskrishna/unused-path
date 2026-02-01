@@ -1,11 +1,3 @@
-"""
-Formatter functions for unused-path package.
-
-These functions provide default formatting behavior for numbered paths.
-They can be imported if needed for custom formatting.
-"""
-
-
 def default_file_formatter(base: str, ext: str, n: int) -> str:
     """
     Default formatter for files.
