@@ -1,11 +1,3 @@
-"""
-Core implementation for unused-path package.
-
-This module contains the main functions:
-- unused_filename: Generate unused file paths
-- unused_directory: Generate unused directory paths
-"""
-
 import os
 from typing import Callable, Optional, Union
 from os import PathLike
@@ -33,24 +25,27 @@ def unused_filename(
     Generate an unused filename by appending a numeric suffix if needed.
     
     Handles existing numbered files intelligently:
-    - file.txt → file.txt (if available)
-    - file.txt → file (1).txt (if file.txt exists)
-    - file (2).txt → file (3).txt (continues sequence)
+    - "file.txt" → "file.txt" (if available)
+    - "file.txt" → "file (1).txt" (if "file.txt" exists)
+    - "file (2).txt" → "file (3).txt" (detects "(2)" and continues to "(3)")
     
     Args:
-        path: Desired file path
+        path: Desired file path (relative or absolute)
         formatter: Optional custom formatter function: (base, ext, n) -> filename.
-                   If None, uses default_file_formatter which formats as
-                   "{base} ({n}){ext}" (e.g., "file (1).txt").
-        max_tries: Safety limit to avoid infinite loops (default: 10,000)
-        create: If True, atomically create the file (race-safe)
+                   If None, uses default format: "{base} ({n}){ext}"
+                   Example: lambda b, e, n: f"{b}_v{n}{e}" → "file_v1.txt"
+        max_tries: Maximum attempts to find unused name (default: 10,000)
+        create: If True, atomically creates the file to prevent race conditions.
+            Useful in multi-threaded/multi-process environments where multiple
+            workers might generate files simultaneously. The created file will
+            be empty and owned by the calling process.
     
     Returns:
-        Unused filename path (absolute or relative, matching input)
+        Path to unused filename (preserves absolute/relative format of input)
     
     Raises:
-        RuntimeError: If no unused filename is found within max_tries
-        OSError: If file creation fails (when create=True)
+        RuntimeError: If no unused filename found within max_tries attempts
+        OSError: If file creation fails when create=True (e.g., permission denied)
     
     Examples:
         >>> unused_filename("document.pdf")
@@ -112,24 +107,27 @@ def unused_directory(
     Generate an unused directory name by appending a numeric suffix if needed.
     
     Handles existing numbered directories intelligently:
-    - backup → backup (if available)
-    - backup → backup (1) (if backup exists)
-    - backup (2) → backup (3) (continues sequence)
+    - "backup" → "backup" (if available)
+    - "backup" → "backup (1)" (if "backup" exists)
+    - "backup (2)" → "backup (3)" (detects "(2)" and continues to "(3)")
     
     Args:
-        path: Desired directory path
+        path: Desired directory path (relative or absolute)
         formatter: Optional custom formatter function: (base, n) -> dirname.
-                   If None, uses default_directory_formatter which formats as
-                   "{base} ({n})" (e.g., "backup (1)").
-        max_tries: Safety limit to avoid infinite loops (default: 10,000)
-        create: If True, atomically create the directory (race-safe)
+                   If None, uses default format: "{base} ({n})"
+                   Example: lambda b, n: f"{b}_{n}" → "backup_1"
+        max_tries: Maximum attempts to find unused name (default: 10,000)
+        create: If True, atomically creates the directory to prevent race conditions.
+            Useful in multi-threaded/multi-process environments where multiple
+            workers might generate directories simultaneously. The created directory
+            will be empty and owned by the calling process.
     
     Returns:
-        Unused directory path (absolute or relative, matching input)
+        Path to unused directory (preserves absolute/relative format of input)
     
     Raises:
-        RuntimeError: If no unused directory is found within max_tries
-        OSError: If directory creation fails (when create=True)
+        RuntimeError: If no unused directory name found within max_tries attempts
+        OSError: If directory creation fails when create=True (e.g., permission denied)
     
     Examples:
         >>> unused_directory("backup")
