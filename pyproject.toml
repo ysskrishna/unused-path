@@ -1,6 +1,6 @@
 [project]
 name = "unused-path"
-version = "1.0.0"
+version = "1.1.0"
 description = "Generate unused file and directory paths by auto-incrementing numeric suffixes. Similar to how browsers handle duplicate downloads."
 readme = "README.md"
 requires-python = ">=3.8"

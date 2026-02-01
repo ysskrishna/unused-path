@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0]
+
+### Added
+- Custom formatter validation functions: `validate_file_formatter()` and `validate_directory_formatter()`
+  - Validates formatter callability, parameter count, return type, and output safety
+  - Prevents invalid formatters that could produce unsafe filenames (path separators, null bytes)
+  - Provides clear error messages for invalid formatters
+- Comprehensive test suite for formatter validation
+
+### Changed
+- Improved docstrings for `unused_filename()` and `unused_directory()` with clearer examples and better parameter descriptions
+- Enhanced README documentation with improved examples and usage patterns
+
 ## [1.0.0]
 
 ### Added
@@ -27,4 +40,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handles gaps in numbered sequences intelligently
 - Supports custom formatting patterns
 
+[1.1.0]: https://github.com/ysskrishna/unused-path/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ysskrishna/unused-path/releases/tag/v1.0.0

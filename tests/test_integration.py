@@ -1,5 +1,3 @@
-"""Integration tests for unused-path package."""
-
 import os
 import tempfile
 import threading

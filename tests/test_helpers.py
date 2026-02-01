@@ -1,5 +1,3 @@
-"""Tests for helper functions."""
-
 import os
 import tempfile
 import pytest
@@ -8,10 +6,10 @@ from unused_path.helpers import (
     try_create_file,
     try_create_directory,
     make_full_path,
-)
-from unused_path.formatters import (
     default_file_formatter,
     default_directory_formatter,
+    validate_file_formatter,
+    validate_directory_formatter,
 )
 
 
@@ -206,3 +204,187 @@ class TestDirectoryFormatter:
         """Test with complex directory name."""
         result = default_directory_formatter("my backup folder", 5)
         assert result == "my backup folder (5)"
+
+
+class TestValidateFileFormatter:
+    """Tests for validate_file_formatter."""
+    
+    def test_valid_formatter(self):
+        """Test validation passes for valid formatter."""
+        formatter = lambda b, e, n: f"{b}_v{n}{e}"
+        validate_file_formatter(formatter)  # Should not raise
+    
+    def test_default_formatter(self):
+        """Test validation passes for default formatter."""
+        validate_file_formatter(default_file_formatter)  # Should not raise
+    
+    def test_not_callable(self):
+        """Test validation fails for non-callable."""
+        with pytest.raises(TypeError, match="must be callable"):
+            validate_file_formatter("not a function")
+    
+    def test_wrong_parameter_count(self):
+        """Test validation fails for wrong parameter count."""
+        def wrong_params(b, e):
+            return f"{b}{e}"
+        
+        with pytest.raises(TypeError, match="must accept 3"):
+            validate_file_formatter(wrong_params)
+    
+    def test_wrong_parameter_count_too_many(self):
+        """Test validation fails for too many parameters."""
+        def too_many_params(b, e, n, extra):
+            return f"{b}_{n}{e}"
+        
+        with pytest.raises(TypeError, match="must accept 3"):
+            validate_file_formatter(too_many_params)
+    
+    def test_wrong_return_type(self):
+        """Test validation fails for wrong return type."""
+        def returns_int(b, e, n):
+            return n
+        
+        with pytest.raises(TypeError, match="must return str"):
+            validate_file_formatter(returns_int)
+    
+    def test_empty_string_return(self):
+        """Test validation fails for empty string return."""
+        def empty_formatter(b, e, n):
+            return ""
+        
+        with pytest.raises(ValueError, match="must return non-empty string"):
+            validate_file_formatter(empty_formatter)
+    
+    def test_path_separator_in_result(self):
+        """Test validation fails for path separator in result."""
+        def bad_formatter(b, e, n):
+            return f"{b}{os.sep}{n}{e}"
+        
+        with pytest.raises(ValueError, match="must not include path separator"):
+            validate_file_formatter(bad_formatter)
+    
+    def test_null_byte_in_result(self):
+        """Test validation fails for null byte in result."""
+        def bad_formatter(b, e, n):
+            return f"{b}\0{n}{e}"
+        
+        with pytest.raises(ValueError, match="must not include null byte"):
+            validate_file_formatter(bad_formatter)
+    
+    def test_raises_type_error(self):
+        """Test validation handles TypeError from formatter."""
+        def bad_formatter(b, e, n):
+            raise TypeError("Custom error")
+        
+        with pytest.raises(TypeError, match="must accept 3 arguments"):
+            validate_file_formatter(bad_formatter)
+    
+    def test_raises_other_exception(self):
+        """Test validation handles other exceptions from formatter."""
+        def bad_formatter(b, e, n):
+            raise ValueError("Something went wrong")
+        
+        with pytest.raises(RuntimeError, match="failed with test arguments"):
+            validate_file_formatter(bad_formatter)
+    
+    def test_valid_with_special_chars(self):
+        """Test validation passes with special characters in result."""
+        formatter = lambda b, e, n: f"{b}@{n}!{e}"
+        validate_file_formatter(formatter)  # Should not raise
+    
+    def test_valid_with_unicode(self):
+        """Test validation passes with unicode characters."""
+        formatter = lambda b, e, n: f"{b}→{n}{e}"
+        validate_file_formatter(formatter)  # Should not raise
+
+
+class TestValidateDirectoryFormatter:
+    """Tests for validate_directory_formatter."""
+    
+    def test_valid_formatter(self):
+        """Test validation passes for valid formatter."""
+        formatter = lambda b, n: f"{b}_v{n}"
+        validate_directory_formatter(formatter)  # Should not raise
+    
+    def test_default_formatter(self):
+        """Test validation passes for default formatter."""
+        validate_directory_formatter(default_directory_formatter)  # Should not raise
+    
+    def test_not_callable(self):
+        """Test validation fails for non-callable."""
+        with pytest.raises(TypeError, match="must be callable"):
+            validate_directory_formatter("not a function")
+    
+    def test_wrong_parameter_count(self):
+        """Test validation fails for wrong parameter count."""
+        def wrong_params(b):
+            return f"{b}"
+        
+        with pytest.raises(TypeError, match="must accept 2"):
+            validate_directory_formatter(wrong_params)
+    
+    def test_wrong_parameter_count_too_many(self):
+        """Test validation fails for too many parameters."""
+        def too_many_params(b, n, extra):
+            return f"{b}_{n}"
+        
+        with pytest.raises(TypeError, match="must accept 2"):
+            validate_directory_formatter(too_many_params)
+    
+    def test_wrong_return_type(self):
+        """Test validation fails for wrong return type."""
+        def returns_int(b, n):
+            return n
+        
+        with pytest.raises(TypeError, match="must return str"):
+            validate_directory_formatter(returns_int)
+    
+    def test_empty_string_return(self):
+        """Test validation fails for empty string return."""
+        def empty_formatter(b, n):
+            return ""
+        
+        with pytest.raises(ValueError, match="must return non-empty string"):
+            validate_directory_formatter(empty_formatter)
+    
+    def test_path_separator_in_result(self):
+        """Test validation fails for path separator in result."""
+        def bad_formatter(b, n):
+            return f"{b}{os.sep}{n}"
+        
+        with pytest.raises(ValueError, match="must not include path separator"):
+            validate_directory_formatter(bad_formatter)
+    
+    def test_null_byte_in_result(self):
+        """Test validation fails for null byte in result."""
+        def bad_formatter(b, n):
+            return f"{b}\0{n}"
+        
+        with pytest.raises(ValueError, match="must not include null byte"):
+            validate_directory_formatter(bad_formatter)
+    
+    def test_raises_type_error(self):
+        """Test validation handles TypeError from formatter."""
+        def bad_formatter(b, n):
+            raise TypeError("Custom error")
+        
+        with pytest.raises(TypeError, match="must accept 2 arguments"):
+            validate_directory_formatter(bad_formatter)
+    
+    def test_raises_other_exception(self):
+        """Test validation handles other exceptions from formatter."""
+        def bad_formatter(b, n):
+            raise ValueError("Something went wrong")
+        
+        with pytest.raises(RuntimeError, match="failed with test arguments"):
+            validate_directory_formatter(bad_formatter)
+    
+    def test_valid_with_special_chars(self):
+        """Test validation passes with special characters in result."""
+        formatter = lambda b, n: f"{b}@{n}!"
+        validate_directory_formatter(formatter)  # Should not raise
+    
+    def test_valid_with_unicode(self):
+        """Test validation passes with unicode characters."""
+        formatter = lambda b, n: f"{b}→{n}"
+        validate_directory_formatter(formatter)  # Should not raise

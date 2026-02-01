@@ -1,5 +1,3 @@
-"""Tests for unused_directory function."""
-
 import os
 import tempfile
 import pytest

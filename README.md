@@ -14,14 +14,26 @@ Generate unused file and directory paths by auto-incrementing numeric suffixes. 
 - **Intelligent sequencing**: Continues from existing numbered files/directories
 - **Custom formatting**: Support for custom formatter functions
 - **Zero dependencies**: Lightweight with no external dependencies
-- **Type safe**: Full type hints for excellent IDE support
-- **Robust**: Handles edge cases, gaps in sequences, and special characters
+- **Thread-safe** — Optional atomic file/directory creation for concurrent environments
+- **Fully typed** — Complete type hints for excellent IDE autocomplete
+- **Battle-tested** — Handles edge cases, gaps in sequences, and special characters
 
 ## Installation
 
 ```bash
 pip install unused-path
 ```
+
+## Why unused-path?
+
+When working with file operations, you often need to avoid overwriting existing files:
+
+- ❌ Downloading files that might already exist
+- ❌ Creating backup directories with the same name
+- ❌ Exporting data to files that may already be present
+- ❌ Generating temporary files without conflicts
+
+`unused-path` handles this automatically, similar to how browsers handle duplicate downloads.
 
 ## Usage Examples
 
@@ -43,38 +55,37 @@ dir_path = unused_directory("backup")
 print(dir_path)  # 'backup' or 'backup (1)' if exists
 ```
 
-### Atomic Creation (Race-Safe)
+### Thread-Safe Creation
+
+Perfect for multi-threaded applications or concurrent workers:
 
 ```python
-# Atomically create file if it doesn't exist
+# Atomically creates the file — no race conditions!
 path = unused_filename("download.zip", create=True)
-# File is created atomically, safe for concurrent access
+with open(path, 'wb') as f:
+    f.write(data)
 
 # Same for directories
-dir_path = unused_directory("exports", create=True)
+export_dir = unused_directory("exports", create=True)
 ```
 
 ### Custom Formatting
 
 ```python
-# Custom formatter for files
+# Version numbers with zero-padding
 formatter = lambda base, ext, n: f"{base}_v{n:03d}{ext}"
 path = unused_filename("log.txt", formatter=formatter)
-print(path)  # 'log_v001.txt'
+# → 'log_v001.txt', 'log_v002.txt', ...
 
-# Custom formatter for directories
+# Underscore style
+formatter = lambda base, ext, n: f"{base}_{n}{ext}"
+path = unused_filename("data.csv", formatter=formatter)
+# → 'data_1.csv', 'data_2.csv', ...
+
+# Similar formatting for directories
 formatter = lambda base, n: f"{base}_v{n}"
 dir_path = unused_directory("backup", formatter=formatter)
-print(dir_path)  # 'backup_v1'
-```
-
-### Handling Existing Numbered Files
-
-```python
-# If you have: test.txt, test (1).txt, test (3).txt
-# The function will intelligently use test (2).txt
-path = unused_filename("test.txt")
-print(path)  # 'test (2).txt'
+# → 'backup_1', 'backup_2', ...
 ```
 
 ## API Reference
@@ -86,32 +97,108 @@ print(path)  # 'test (2).txt'
 
 ### Parameters
 
-- `path`: Desired file or directory path (str or PathLike)
+- `path`: Desired directory path (relative or absolute)
 - `formatter`: Optional custom formatter function
-  - For files: `(base: str, ext: str, n: int) -> str`
-  - For directories: `(base: str, n: int) -> str`
-- `max_tries`: Safety limit to avoid infinite loops (default: 10,000)
-- `create`: If True, atomically create the file/directory (race-safe)
+    | Type | Signature |
+    |---------|-----------|
+    | File | `(base: str, ext: str, n: int) -> str` |
+    | Directory | `(base: str, n: int) -> str` |
+- `max_tries`: Maximum attempts to find unused name (default: 10,000)
+- `create`: If True, atomically creates the directory to prevent race conditions.
+            Useful in multi-threaded/multi-process environments where multiple
+            workers might generate directories simultaneously. The created directory
+            will be empty and owned by the calling process.
 
 ### Returns
 
-- Unused path (str) - absolute or relative, matching input format
+- Unused path (str) - preserves the absolute or relative format of the input
 
 ### Raises
 
-- `RuntimeError`: If no unused path is found within max_tries
-- `OSError`: If file/directory creation fails (when create=True)
+- `RuntimeError`: If no unused path is found within max_tries attempts
+- `OSError`: If file/directory creation fails when create=True (e.g., permission denied)
 
-## Why unused-path?
+## Real-World Examples
 
-When working with file operations, you often need to avoid overwriting existing files:
+### Download Manager
 
-- ❌ Downloading files that might already exist
-- ❌ Creating backup directories with the same name
-- ❌ Exporting data to files that may already be present
-- ❌ Generating temporary files without conflicts
+```python
+import requests
+from unused_path import unused_filename
 
-`unused-path` handles this automatically, similar to how browsers handle duplicate downloads.
+def download_file(url):
+    filename = url.split('/')[-1]
+    path = unused_filename(filename, create=True)
+    
+    response = requests.get(url)
+    with open(path, 'wb') as f:
+        f.write(response.content)
+    
+    return path
+```
+
+### Backup System
+
+```python
+from datetime import datetime
+from unused_path import unused_directory
+
+def create_backup():
+    timestamp = datetime.now().strftime("%Y%m%d")
+    backup_dir = unused_directory(f"backup_{timestamp}", create=True)
+    # ... perform backup ...
+    return backup_dir
+```
+
+### Data Export
+
+```python
+from unused_path import unused_filename
+
+def export_to_csv(data, base_name="export"):
+    path = unused_filename(f"{base_name}.csv", create=True)
+    data.to_csv(path, index=False)
+    print(f"✓ Exported to {path}")
+    return path
+```
+
+### Temporary Files
+
+```python
+from unused_path import unused_filename
+import tempfile
+import os
+
+def create_temp_file(prefix="temp"):
+    temp_dir = tempfile.gettempdir()
+    path = os.path.join(temp_dir, f"{prefix}.txt")
+    return unused_filename(path, create=True)
+```
+
+
+## Advanced Patterns
+
+### Custom Formatter with Timestamp
+
+```python
+from datetime import datetime
+
+def timestamp_formatter(base, ext, n):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    return f"{base}_{timestamp}_{n}{ext}"
+
+path = unused_filename("log.txt", formatter=timestamp_formatter)
+# → 'log_20240115_143052_1.txt'
+```
+
+### Limiting Maximum Tries
+
+```python
+try:
+    path = unused_filename("file.txt", max_tries=100)
+except RuntimeError:
+    print("Too many files with the same name!")
+```
 
 ## Changelog
 
