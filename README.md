@@ -2,9 +2,10 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/ysskrishna/unused-path/blob/main/LICENSE)
-![Tests](https://github.com/ysskrishna/unused-path/actions/workflows/test.yml/badge.svg)
+[![Tests](https://github.com/ysskrishna/unused-path/actions/workflows/test.yml/badge.svg)](https://github.com/ysskrishna/unused-path/actions/workflows/test.yml)
 [![PyPI](https://img.shields.io/pypi/v/unused-path)](https://pypi.org/project/unused-path/)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/unused-path?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/unused-path)
+[![Author site](https://img.shields.io/badge/author-ysskrishna.space-informational)](https://ysskrishna.space)
 [![Context7](https://img.shields.io/badge/Context7-docs-18181B)](https://context7.com/ysskrishna/unused-path)
 [![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-ask-18181B)](https://deepwiki.com/ysskrishna/unused-path)
 
@@ -126,7 +127,10 @@ dir_path = unused_directory("backup", formatter=formatter)
 
 ## Real-World Examples
 
-### Download Manager
+<a id="download-manager"></a>
+
+<details>
+<summary><b>Download Manager</b></summary>
 
 ```python
 import requests
@@ -143,7 +147,12 @@ def download_file(url):
     return path
 ```
 
-### Backup System
+</details>
+
+<a id="backup-system"></a>
+
+<details>
+<summary><b>Backup System</b></summary>
 
 ```python
 from datetime import datetime
@@ -156,7 +165,12 @@ def create_backup():
     return backup_dir
 ```
 
-### Data Export
+</details>
+
+<a id="data-export"></a>
+
+<details>
+<summary><b>Data Export</b></summary>
 
 ```python
 from unused_path import unused_filename
@@ -168,7 +182,12 @@ def export_to_csv(data, base_name="export"):
     return path
 ```
 
-### Temporary Files
+</details>
+
+<a id="temporary-files"></a>
+
+<details>
+<summary><b>Temporary Files</b></summary>
 
 ```python
 from unused_path import unused_filename
@@ -181,10 +200,14 @@ def create_temp_file(prefix="temp"):
     return unused_filename(path, create=True)
 ```
 
+</details>
 
 ## Advanced Patterns
 
-### Custom Formatter with Timestamp
+<a id="custom-formatter-with-timestamp"></a>
+
+<details>
+<summary><b>Custom Formatter with Timestamp</b></summary>
 
 ```python
 from unused_path import unused_filename
@@ -199,7 +222,12 @@ path = unused_filename("log.txt", formatter=timestamp_formatter)
 # → 'log_20240115_143052_1.txt'
 ```
 
-### Limiting Maximum Tries
+</details>
+
+<a id="limiting-maximum-tries"></a>
+
+<details>
+<summary><b>Limiting Maximum Tries</b></summary>
 
 ```python
 from unused_path import unused_filename
@@ -210,32 +238,43 @@ except RuntimeError:
     print("Too many files with the same name!")
 ```
 
-## Changelog
-
-See [CHANGELOG.md](https://github.com/ysskrishna/unused-path/blob/main/CHANGELOG.md) for a detailed list of changes and version history.
+</details>
 
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](https://github.com/ysskrishna/unused-path/blob/main/CONTRIBUTING.md) for details.
+
+## Built and maintained by
+
+unused-path is built and maintained by:
+
+| | Name | GitHub | Role |
+|---|------|--------|------|
+| <img src="https://github.com/ysskrishna.png?size=120" width="60" height="60" alt="Y. Siva Sai Krishna"> | **Y. Siva Sai Krishna** | [@ysskrishna](https://github.com/ysskrishna) | Creator |
+
+## Changelog
+
+See [CHANGELOG](CHANGELOG.md) for release history.
 
 ## Support
 
 If you find this library helpful:
 
 - ⭐ Star the repository
-- 🐛 Report issues
+- 🐛 [Report issues](https://github.com/ysskrishna/unused-path/issues)
 - 🔀 Submit pull requests
 - 💝 [Sponsor on GitHub](https://github.com/sponsors/ysskrishna)
 
 ## License
 
-MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](https://github.com/ysskrishna/unused-path/blob/main/LICENSE) file for details.
+MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) — see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="left">
   <a href="https://github.com/ysskrishna">Author's GitHub</a> •
   <a href="https://linkedin.com/in/ysskrishna">Author's LinkedIn</a> •
-  <a href="https://github.com/ysskrishna/unused-path/issues">Report Issues</a> •
-  <a href="https://pypi.org/project/unused-path/">Package on PyPI</a>
+  <a href="https://ysskrishna.space">Author's site</a> •
+  <a href="https://pypi.org/project/unused-path/">Package on PyPI</a> •
+  <a href="https://github.com/ysskrishna/unused-path/issues">Report Issues</a>
 </p>
