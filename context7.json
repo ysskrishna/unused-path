@@ -1,0 +1,29 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "unused-path",
+  "description": "Zero-dependency Python library that returns an unused file or directory path by adding a numeric suffix, the way browsers name duplicate downloads, with custom formatters and atomic creation.",
+  "excludeFolders": [
+    "archive",
+    "archived",
+    "old",
+    "deprecated",
+    "legacy",
+    "tests",
+    ".github"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "changelog.md",
+    "LICENSE.md",
+    "license.md",
+    "CODE_OF_CONDUCT.md",
+    "NEWS.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "AGENTS.md"
+  ],
+  "rules": [
+    "Import from unused_path: unused_filename and unused_directory. The default suffix format is 'name (1).ext'.",
+    "Pass create=True to create the file or directory atomically and avoid races between threads or processes."
+  ]
+}
