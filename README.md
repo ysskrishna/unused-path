@@ -5,6 +5,8 @@
 ![Tests](https://github.com/ysskrishna/unused-path/actions/workflows/test.yml/badge.svg)
 [![PyPI](https://img.shields.io/pypi/v/unused-path)](https://pypi.org/project/unused-path/)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/unused-path?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/unused-path)
+[![Context7](https://img.shields.io/badge/Context7-docs-18181B)](https://context7.com/ysskrishna/unused-path)
+[![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-ask-18181B)](https://deepwiki.com/ysskrishna/unused-path)
 
 Generate unused file and directory paths by auto-incrementing numeric suffixes. Similar to how browsers handle duplicate downloads.
 
