@@ -60,6 +60,8 @@ print(dir_path)  # 'backup' or 'backup (1)' if exists
 Perfect for multi-threaded applications or concurrent workers:
 
 ```python
+from unused_path import unused_filename, unused_directory
+
 # Atomically creates the file — no race conditions!
 path = unused_filename("download.zip", create=True)
 with open(path, 'wb') as f:
@@ -72,6 +74,8 @@ export_dir = unused_directory("exports", create=True)
 ### Custom Formatting
 
 ```python
+from unused_path import unused_filename, unused_directory
+
 # Version numbers with zero-padding
 formatter = lambda base, ext, n: f"{base}_v{n:03d}{ext}"
 path = unused_filename("log.txt", formatter=formatter)
@@ -181,6 +185,8 @@ def create_temp_file(prefix="temp"):
 ### Custom Formatter with Timestamp
 
 ```python
+from unused_path import unused_filename
+
 from datetime import datetime
 
 def timestamp_formatter(base, ext, n):
@@ -194,6 +200,8 @@ path = unused_filename("log.txt", formatter=timestamp_formatter)
 ### Limiting Maximum Tries
 
 ```python
+from unused_path import unused_filename
+
 try:
     path = unused_filename("file.txt", max_tries=100)
 except RuntimeError:
