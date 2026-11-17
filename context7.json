@@ -1,5 +1,7 @@
 {
   "$schema": "https://context7.com/schema/context7.json",
+  "url": "https://context7.com/ysskrishna/unused-path",
+  "public_key": "pk_VesXVq9WjBT8ecKU9XIZz",
   "projectTitle": "unused-path",
   "description": "Zero-dependency Python library that returns an unused file or directory path by adding a numeric suffix, the way browsers name duplicate downloads, with custom formatters and atomic creation.",
   "excludeFolders": [
